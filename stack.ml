@@ -134,6 +134,12 @@ module TwoListQueue : Queue = struct
   
   let empty = {front=[]; back=[]}
 
+  (* check the represent a queue is normal *)
+  let rep_ok {front; back} = 
+    if List.length front = 0 && back <> [] 
+    then failwith "not normal"
+    else {front; back}
+
   let is_empty = function
     | {front=[]; back=[]} -> true
     | _ -> false
@@ -145,7 +151,7 @@ module TwoListQueue : Queue = struct
     
   (* constant time [enqueue] operation: just cons
      the new elements onto the [back]. *)
-  let enqueue x q = norm {q with back=x::q.back} 
+  let enqueue x q = rep_ok (norm {q with back=x::q.back}) 
   
   let peek = function 
     | {front=[]; _} -> None
@@ -160,6 +166,6 @@ module TwoListQueue : Queue = struct
      constant time. *)
   let dequeue = function
     | {front=[]; _} -> None
-    | {front=_::xs; back} -> Some (norm {front=xs; back})
+    | {front=_::xs; back} -> Some (rep_ok (norm {front=xs; back}))
 end
 
